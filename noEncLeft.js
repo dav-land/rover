@@ -10,7 +10,7 @@ const encRight   = new Gpio(2, {mode: Gpio.INPUT,
 				 pullUpDown: Gpio.PUD_DOWN,
 				 edge: Gpio.EITHER_EDGE});
 
-let dutyCycle = 80;
+let dutyCycle = 100;
 let countRight = 0;
 
 encRight.on('interupt', (level) => {
@@ -22,10 +22,16 @@ encRight.on('interupt', (level) => {
 setInterval(() => {
     console.log(countRight);
     wheelLeft.pwmWrite(dutyCycle);
-    sleepLeft.digitalWrite(1);
+    sleepLeft.digitalWrite(0);
     dirLeft.digitalWrite(0);
     wheelRight.pwmWrite(dutyCycle);
     sleepRight.digitalWrite(1);
     dirRight.digitalWrite(0);
-
+    countRight += 1;
+    if(countRight == 30){
+	console.log(countRight);
+	sleepLeft.digitalWrite(0);
+	sleepRight.digitalWrite(0);
+	return process.exit(22);
+    }
 }, 20);
